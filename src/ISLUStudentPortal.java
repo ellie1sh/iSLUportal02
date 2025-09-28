@@ -3738,17 +3738,17 @@ public class ISLUStudentPortal extends JFrame {
         java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("MMMM dd, yyyy");
         String dateStr = currentDate.format(dateFormatter);
 
-        JLabel headerLabel = new JLabel(subItems.getFirst() + " - As of " + dateStr);
+        JLabel headerLabel = new JLabel("Statement of Accounts (FIRST SEMESTER, 2025-2026)");
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(headerLabel, BorderLayout.WEST);
 
-        // Profile icon on the right
-        JLabel profileIcon = new JLabel("👤");
-        profileIcon.setForeground(Color.WHITE);
-        profileIcon.setFont(new Font("Arial", Font.PLAIN, 24));
-        profileIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        headerPanel.add(profileIcon, BorderLayout.EAST);
+        // Pie chart icon on the right
+        JLabel pieIcon = new JLabel("📊");
+        pieIcon.setForeground(Color.WHITE);
+        pieIcon.setFont(new Font("Arial", Font.PLAIN, 24));
+        pieIcon.setHorizontalAlignment(SwingConstants.CENTER);
+        headerPanel.add(pieIcon, BorderLayout.EAST);
 
         panel.add(headerPanel, BorderLayout.NORTH);
 
@@ -3758,13 +3758,13 @@ public class ISLUStudentPortal extends JFrame {
         contentPanel.setBackground(Color.WHITE);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Student Info
+        // Student Info - Matching HTML design
         JPanel studentInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         studentInfoPanel.setBackground(Color.WHITE);
         studentInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         studentInfoPanel.setPreferredSize(new Dimension(0, 80));
 
-        JLabel studentIcon = new JLabel("👤");
+        JLabel studentIcon = new JLabel("👩");
         studentIcon.setFont(new Font("Arial", Font.PLAIN, 20));
         studentInfoPanel.add(studentIcon);
 
@@ -3772,7 +3772,7 @@ public class ISLUStudentPortal extends JFrame {
         studentTextPanel.setLayout(new BoxLayout(studentTextPanel, BoxLayout.Y_AXIS));
         studentTextPanel.setBackground(Color.WHITE);
 
-        JLabel studentIDLabel = new JLabel(studentID);
+        JLabel studentIDLabel = new JLabel(studentID + " | BSIT 2");
         studentIDLabel.setFont(new Font("Arial", Font.BOLD, 14));
         studentTextPanel.add(studentIDLabel);
 
@@ -3784,131 +3784,65 @@ public class ISLUStudentPortal extends JFrame {
         contentPanel.add(studentInfoPanel);
         contentPanel.add(Box.createVerticalStrut(20));
 
-        // Amount Due Section
+        // Amount Due Section - Matching HTML design with large typography
         JPanel amountPanel = new JPanel();
         amountPanel.setLayout(new BoxLayout(amountPanel, BoxLayout.Y_AXIS));
         amountPanel.setBackground(Color.WHITE);
 
-        // Total Balance Section
-        JLabel totalBalanceLabel = new JLabel("Total Balance Due:");
-        totalBalanceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        amountPanel.add(totalBalanceLabel);
-
-        JLabel totalBalanceValue = new JLabel("P " + String.format("%,.2f", accountStatement.getBalance()));
-        totalBalanceValue.setFont(new Font("Arial", Font.BOLD, 24));
-        totalBalanceValue.setForeground(accountStatement.getBalance() > 0 ? new Color(200, 0, 0) : new Color(0, 150, 0));
-        amountDueValueLabel = totalBalanceValue; // Store reference for updates
-        amountPanel.add(totalBalanceValue);
+        // Amount Due for PRELIM - Large typography like HTML
+        JLabel prelimDueLabel = new JLabel("Your amount due for PRELIM is:");
+        prelimDueLabel.setFont(new Font("Arial", Font.PLAIN, 30));
+        amountPanel.add(prelimDueLabel);
         amountPanel.add(Box.createVerticalStrut(10));
 
-        // Exam Period Dues
-        JLabel prelimDueLabel = new JLabel("Prelim Exam Due: P " +
-                String.format("%,.2f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.PRELIM)));
-        prelimDueLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        amountPanel.add(prelimDueLabel);
+        JLabel prelimDueValue = new JLabel("P " + String.format("%,.2f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.PRELIM)));
+        prelimDueValue.setFont(new Font("Arial", Font.BOLD, 50));
+        prelimDueValue.setForeground(new Color(144, 24, 24)); // #901818 color from HTML
+        amountDueValueLabel = prelimDueValue; // Store reference for updates
+        amountPanel.add(prelimDueValue);
+        amountPanel.add(Box.createVerticalStrut(20));
 
-        JLabel midtermDueLabel = new JLabel("Midterm Exam Due: P " +
-                String.format("%,.2f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.MIDTERM)));
-        midtermDueLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        amountPanel.add(midtermDueLabel);
+        // Remaining Balance - Large typography like HTML
+        JLabel remainingBalanceLabel = new JLabel("Your remaining balance as of " + dateStr + " is:");
+        remainingBalanceLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        amountPanel.add(remainingBalanceLabel);
+        amountPanel.add(Box.createVerticalStrut(10));
 
-        JLabel finalsDueLabel = new JLabel("Finals Exam Due: P " +
-                String.format("%,.2f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.FINALS)));
-        finalsDueLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        amountPanel.add(finalsDueLabel);
+        JLabel remainingBalanceValue = new JLabel("P " + String.format("%,.2f", accountStatement.getBalance()));
+        remainingBalanceValue.setFont(new Font("Arial", Font.BOLD, 50));
+        remainingBalanceValue.setForeground(new Color(144, 24, 24)); // #901818 color from HTML
+        amountPanel.add(remainingBalanceValue);
 
         contentPanel.add(amountPanel);
-        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(20));
 
-        // Overpayment Section
-        JPanel overpaymentPanel = new JPanel();
-        overpaymentPanel.setLayout(new BoxLayout(overpaymentPanel, BoxLayout.Y_AXIS));
-        overpaymentPanel.setBackground(Color.WHITE);
-
-        // Reuse the currentDate and dateFormatter from header, just create new formatted string
-        String currentDateStr = currentDate.format(dateFormatter);
-
-        if (accountStatement.getOverpayment() > 0) {
-            JLabel overpaymentLabel = new JLabel("Overpayment/Credit Balance as of " + currentDateStr + ":");
-            overpaymentLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            overpaymentPanel.add(overpaymentLabel);
-
-            JLabel overpaymentValue = new JLabel("P " + String.format("%,.2f", accountStatement.getOverpayment()));
-            overpaymentValue.setFont(new Font("Arial", Font.BOLD, 20));
-            overpaymentValue.setForeground(new Color(0, 100, 200));
-            overpaymentValueLabel = overpaymentValue; // Store reference for updates
-            overpaymentPanel.add(overpaymentValue);
-        } else {
-            JLabel paymentSummaryLabel = new JLabel("Payment Summary as of " + currentDateStr + ":");
-            paymentSummaryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            overpaymentPanel.add(paymentSummaryLabel);
-
-            JLabel totalAmountLabel = new JLabel("Total Amount: P " + String.format("%,.2f", accountStatement.getTotalAmount()));
-            totalAmountLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-            overpaymentPanel.add(totalAmountLabel);
-
-            JLabel amountPaidLabel = new JLabel("Amount Paid: P " + String.format("%,.2f", accountStatement.getAmountPaid()));
-            amountPaidLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-            overpaymentPanel.add(amountPaidLabel);
-        }
-
-        contentPanel.add(overpaymentPanel);
-        contentPanel.add(Box.createVerticalStrut(15));
-
-        // Exam Payment Status Section
-        JPanel examStatusPanel = new JPanel();
-        examStatusPanel.setLayout(new BoxLayout(examStatusPanel, BoxLayout.Y_AXIS));
-        examStatusPanel.setBackground(Color.WHITE);
-
-        // Use the already declared currentDateStr variable
-        examStatusPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                "Exam Payment Status as of " + currentDateStr,
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new Font("Arial", Font.BOLD, 14),
-                new Color(10, 45, 90)
-        ));
+        // PRELIM STATUS - Matching HTML design
+        JPanel prelimStatusPanel = new JPanel();
+        prelimStatusPanel.setLayout(new BoxLayout(prelimStatusPanel, BoxLayout.Y_AXIS));
+        prelimStatusPanel.setBackground(Color.WHITE);
 
         // Update payment statuses
         accountStatement.updatePaymentStatuses();
 
-        // Prelim Status with eligibility message
-        String prelimStatusText = accountStatement.getExamEligibilityMessage(AccountStatement.ExamPeriod.PRELIM);
-        Color prelimStatusColor = accountStatement.isPrelimPaid() ?
-                new Color(0, 150, 0) : new Color(200, 0, 0);
+        // Prelim Status with color coding like HTML
+        String prelimStatusText;
+        Color prelimStatusColor;
+        
+        if (accountStatement.isPrelimPaid()) {
+            prelimStatusText = "PRELIM STATUS: PAID. Permitted to take the exams.";
+            prelimStatusColor = new Color(0, 150, 0); // Green
+        } else {
+            prelimStatusText = "PRELIM STATUS: NOT PAID. Please pay before prelim exams. Ignore If you're SLU Dependent or Full TOF Scholar. For verification on unposted payments after \"as of\" date, please email sass@slu.edu.ph";
+            prelimStatusColor = new Color(200, 0, 0); // Red
+        }
 
         JLabel prelimStatusLabel = new JLabel(prelimStatusText);
         prelimStatusLabel.setFont(new Font("Arial", Font.BOLD, 12));
         prelimStatusLabel.setForeground(prelimStatusColor);
         this.prelimStatusLabel = prelimStatusLabel;
-        examStatusPanel.add(prelimStatusLabel);
-        examStatusPanel.add(Box.createVerticalStrut(5));
+        prelimStatusPanel.add(prelimStatusLabel);
 
-        // Midterm Status with eligibility message
-        String midtermStatusText = accountStatement.getExamEligibilityMessage(AccountStatement.ExamPeriod.MIDTERM);
-        Color midtermStatusColor = accountStatement.isMidtermPaid() ?
-                new Color(0, 150, 0) : new Color(200, 0, 0);
-
-        JLabel midtermStatusLabel = new JLabel(midtermStatusText);
-        midtermStatusLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        midtermStatusLabel.setForeground(midtermStatusColor);
-        this.midtermStatusLabel = midtermStatusLabel;
-        examStatusPanel.add(midtermStatusLabel);
-        examStatusPanel.add(Box.createVerticalStrut(5));
-
-        // Finals Status with eligibility message
-        String finalsStatusText = accountStatement.getExamEligibilityMessage(AccountStatement.ExamPeriod.FINALS);
-        Color finalsStatusColor = accountStatement.isFinalsPaid() ?
-                new Color(0, 150, 0) : new Color(200, 0, 0);
-
-        JLabel finalsStatusLabel = new JLabel(finalsStatusText);
-        finalsStatusLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        finalsStatusLabel.setForeground(finalsStatusColor);
-        this.finalsStatusLabel = finalsStatusLabel;
-        examStatusPanel.add(finalsStatusLabel);
-
-        contentPanel.add(examStatusPanel);
+        contentPanel.add(prelimStatusPanel);
         contentPanel.add(Box.createVerticalStrut(20));
 
         // Breakdown of Fees
@@ -3939,7 +3873,7 @@ public class ISLUStudentPortal extends JFrame {
         java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("MMMM dd, yyyy");
         String dateStr = currentDate.format(dateFormatter);
 
-        JLabel headerLabel = new JLabel("Fee Breakdown as of " + dateStr);
+        JLabel headerLabel = new JLabel("Breakdown of fees as of " + dateStr);
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 14));
         headerPanel.add(headerLabel);
@@ -3949,32 +3883,37 @@ public class ISLUStudentPortal extends JFrame {
         // Update payment statuses first
         accountStatement.updatePaymentStatuses();
 
-        // Table with status column
-        String[] columnNames = {"Date", "Description", "Amount", "Status"};
+        // Table matching HTML structure - Date, Description, Amount
+        String[] columnNames = {"Date", "Description", "Amount"};
 
-        // Get fee breakdowns from account statement
+        // Get fee breakdowns and payment history from account statement
         List<FeeBreakdown> fees = accountStatement.getFeeBreakdowns();
-        Object[][] data = new Object[fees.size() + 3][4]; // +3 for header, total, and balance rows, 4 columns
+        List<PaymentTransaction> payments = accountStatement.getPaymentHistory();
+        
+        // Calculate total rows: beginning balance + fees + payments
+        Object[][] data = new Object[1 + fees.size() + payments.size()][3];
 
         // Add beginning balance row
-        data[0] = new Object[]{"", "ASSESSMENT DETAILS", "", ""};
+        data[0] = new Object[]{"", "BEGINNING BALANCE", "0.00"};
 
-        // Add fee items with status
+        // Add fee items (matching HTML structure)
         int row = 1;
         for (FeeBreakdown fee : fees) {
-            data[row] = fee.toTableRowWithStatus();
+            String feeDateStr = fee.getDatePosted() != null ? 
+                fee.getDatePosted().format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "";
+            String amountStr = String.format("%,.2f", fee.getAmount());
+            data[row] = new Object[]{feeDateStr, fee.getDescription(), amountStr};
             row++;
         }
 
-        // Add total row
-        data[row] = new Object[]{"", "TOTAL ASSESSMENT", String.format("P %,.2f", accountStatement.getTotalAmount()), ""};
-        row++;
-
-        // Add balance row with current date
-        java.time.format.DateTimeFormatter shortDateFormatter = java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String shortDateStr = currentDate.format(shortDateFormatter);
-        String balanceStatus = accountStatement.getBalance() <= 0 ? "FULLY PAID" : "UNPAID";
-        data[row] = new Object[]{shortDateStr, "CURRENT BALANCE", String.format("P %,.2f", accountStatement.getBalance()), balanceStatus};
+        // Add payment entries (negative amounts in parentheses like HTML)
+        for (PaymentTransaction payment : payments) {
+            String paymentDateStr = payment.getDate();
+            String description = "PAYMENT RECEIVED (" + payment.getReference() + ")";
+            String amountStr = "(" + String.format("%,.2f", Math.abs(Double.parseDouble(payment.getAmount().replace("P ", "").replace(",", "")))) + ")";
+            data[row] = new Object[]{paymentDateStr, description, amountStr};
+            row++;
+        }
 
         feeBreakdownTableModel = new DefaultTableModel(data, columnNames) {
             @Override
@@ -4251,7 +4190,7 @@ public class ISLUStudentPortal extends JFrame {
         headerPanel.setBackground(new Color(10, 45, 90));
         headerPanel.setPreferredSize(new Dimension(0, 50));
 
-        JLabel headerLabel = new JLabel(subItems.get(1));
+        JLabel headerLabel = new JLabel("Online Payment Channels");
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(headerLabel);
@@ -4269,31 +4208,29 @@ public class ISLUStudentPortal extends JFrame {
         java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("MMMM dd, yyyy");
         String dateStr = currentDate.format(dateFormatter);
 
-        JLabel instructionLabel = new JLabel("<html>Tuition fees can be paid via the available online payment channels.<br>Last updated: " + dateStr + "</html>");
-        instructionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        instructionLabel.setForeground(Color.DARK_GRAY);
+        JLabel instructionLabel = new JLabel("Tuition fees can be paid via the available online payment channels.");
+        instructionLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        instructionLabel.setForeground(new Color(14, 40, 79)); // #0e284f color from HTML
         contentPanel.add(instructionLabel);
         contentPanel.add(Box.createVerticalStrut(20));
 
-        // Payment channel buttons
+        // Payment channel buttons matching HTML design
         String[] channels = {
                 "UnionBank UPay Online",
                 "Dragonpay Payment Gateway",
-                "BPI BPI Online",
-                "BDO BDO Online",
+                "BPI Online",
+                "BDO Online",
                 "BDO Bills Payment",
-                "Bukas Tuition Installment Plans",
-                "Cashier Onsite Payment"
+                "Bukas Tuition Installment Plans"
         };
 
         Color[] colors = {
-                new Color(255, 140, 0), // Orange
-                new Color(255, 69, 0),  // Red-Orange
-                new Color(220, 20, 60), // Crimson
-                new Color(0, 100, 200), // Blue
-                new Color(0, 100, 200), // Blue
-                new Color(135, 206, 235), // Light Blue
-                new Color(100, 100, 100) // Gray for onsite
+                new Color(255, 140, 0), // Orange - UnionBank
+                new Color(255, 69, 0),  // Red-Orange - Dragonpay
+                new Color(220, 20, 60), // Crimson - BPI
+                new Color(0, 100, 200), // Blue - BDO
+                new Color(0, 100, 200), // Blue - BDO Bills
+                new Color(135, 206, 235) // Light Blue - Bukas
         };
 
         for (int i = 0; i < channels.length; i++) {
@@ -4308,11 +4245,7 @@ public class ISLUStudentPortal extends JFrame {
             // Add action listener for payment processing
             final String channelName = channels[i];
             channelButton.addActionListener(e -> {
-                if (channelName.contains("Cashier")) {
-                    showOnsitePaymentDialog(channelName);
-                } else {
-                    showPaymentDialog(channelName);
-                }
+                showPaymentDialog(channelName);
             });
 
             contentPanel.add(channelButton);
@@ -4519,7 +4452,7 @@ public class ISLUStudentPortal extends JFrame {
      * Shows payment dialog to collect card information and process payment
      */
     private void showPaymentDialog(String channelName) {
-        JDialog paymentDialog = new JDialog(this, "Payment - " + channelName, true);
+        JDialog paymentDialog = new JDialog(this, "Payment through " + channelName, true);
         paymentDialog.setSize(500, 400);
         paymentDialog.setLocationRelativeTo(this);
         paymentDialog.setLayout(new BorderLayout());
@@ -4529,7 +4462,7 @@ public class ISLUStudentPortal extends JFrame {
         headerPanel.setBackground(new Color(10, 45, 90));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        JLabel headerLabel = new JLabel("Payment Information - " + channelName);
+        JLabel headerLabel = new JLabel("Payment through " + channelName);
         headerLabel.setForeground(Color.WHITE);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(headerLabel);
@@ -4542,88 +4475,118 @@ public class ISLUStudentPortal extends JFrame {
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         contentPanel.setBackground(Color.WHITE);
 
-        // Card Number
-        JPanel cardNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        cardNumberPanel.setBackground(Color.WHITE);
-        JLabel cardNumberLabel = new JLabel("Card Number (16 digits):");
-        cardNumberLabel.setPreferredSize(new Dimension(150, 25));
-        cardNumberPanel.add(cardNumberLabel);
+        // AMOUNT TO PAY section - matching HTML design
+        JPanel amountSection = new JPanel();
+        amountSection.setLayout(new BoxLayout(amountSection, BoxLayout.Y_AXIS));
+        amountSection.setBackground(Color.WHITE);
+        amountSection.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                "AMOUNT TO PAY",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Arial", Font.BOLD, 14),
+                new Color(10, 45, 90)
+        ));
 
-        JTextField cardNumberField = new JTextField();
-        cardNumberField.setPreferredSize(new Dimension(200, 25));
-        cardNumberField.setDocument(new CardNumberDocument()); // Custom document for formatting
-        cardNumberPanel.add(cardNumberField);
-        contentPanel.add(cardNumberPanel);
-        contentPanel.add(Box.createVerticalStrut(15));
+        // Amount input field - large like HTML
+        JPanel amountInputPanel = new JPanel();
+        amountInputPanel.setBackground(Color.WHITE);
+        
+        JTextField amountField = new JTextField();
+        amountField.setFont(new Font("Arial", Font.PLAIN, 30));
+        amountField.setHorizontalAlignment(SwingConstants.CENTER);
+        amountField.setPreferredSize(new Dimension(300, 50));
+        amountField.setText(String.format("%.0f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.PRELIM)));
+        amountInputPanel.add(amountField);
+        
+        amountSection.add(Box.createVerticalStrut(20));
+        amountSection.add(amountInputPanel);
+        amountSection.add(Box.createVerticalStrut(20));
 
-        // CVV
-        JPanel cvvPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        cvvPanel.setBackground(Color.WHITE);
-        JLabel cvvLabel = new JLabel("CVV (3 digits):");
-        cvvLabel.setPreferredSize(new Dimension(150, 25));
-        cvvPanel.add(cvvLabel);
+        // Payment method selection (for Dragonpay)
+        if (channelName.contains("Dragonpay")) {
+            JPanel paymentMethodPanel = new JPanel();
+            paymentMethodPanel.setBackground(Color.WHITE);
+            
+            JLabel methodLabel = new JLabel("SELECT A PAYMENT OPTION:");
+            methodLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            paymentMethodPanel.add(methodLabel);
+            
+            JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[]{
+                "GCash", "PayMaya", "BPI Online", "BDO Online", "Metrobank Online"
+            });
+            paymentMethodCombo.setPreferredSize(new Dimension(200, 30));
+            paymentMethodPanel.add(paymentMethodCombo);
+            
+            amountSection.add(paymentMethodPanel);
+            amountSection.add(Box.createVerticalStrut(10));
+            
+            // Service charge note
+            JLabel serviceChargeNote = new JLabel("<html>Note: There will be a twenty five pesos (P 25.00) service charge for using dragon pay.<br>An additional fee will be charged depending on the payment channel.</html>");
+            serviceChargeNote.setFont(new Font("Arial", Font.PLAIN, 11));
+            serviceChargeNote.setForeground(new Color(100, 100, 100));
+            amountSection.add(serviceChargeNote);
+        }
 
-        JTextField cvvField = new JTextField();
-        cvvField.setPreferredSize(new Dimension(100, 25));
-        cvvField.setDocument(new CVVDocument()); // Custom document for 3 digits only
-        cvvPanel.add(cvvField);
-        contentPanel.add(cvvPanel);
-        contentPanel.add(Box.createVerticalStrut(15));
-
-        // Expiration Date
-        JPanel expDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        expDatePanel.setBackground(Color.WHITE);
-        JLabel expDateLabel = new JLabel("Expiration Date (MM/YY):");
-        expDateLabel.setPreferredSize(new Dimension(150, 25));
-        expDatePanel.add(expDateLabel);
-
-        JTextField expDateField = new JTextField();
-        expDateField.setPreferredSize(new Dimension(100, 25));
-        expDateField.setDocument(new ExpirationDateDocument()); // Custom document for MM/YY format
-        expDatePanel.add(expDateField);
-        contentPanel.add(expDatePanel);
-        contentPanel.add(Box.createVerticalStrut(15));
-
-        // Card Holder Name
-        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        namePanel.setBackground(Color.WHITE);
-        JLabel nameLabel = new JLabel("Card Holder Name:");
-        nameLabel.setPreferredSize(new Dimension(150, 25));
-        namePanel.add(nameLabel);
-
-        JTextField nameField = new JTextField();
-        nameField.setPreferredSize(new Dimension(200, 25));
-        namePanel.add(nameField);
-        contentPanel.add(namePanel);
+        contentPanel.add(amountSection);
         contentPanel.add(Box.createVerticalStrut(20));
 
-        // Amount to Pay
-        JPanel amountPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        amountPanel.setBackground(Color.WHITE);
-        JLabel amountLabel = new JLabel("Amount to Pay:");
-        amountLabel.setPreferredSize(new Dimension(150, 25));
-        amountPanel.add(amountLabel);
+        // AMOUNT TO PAY + CHARGES section
+        JPanel totalSection = new JPanel();
+        totalSection.setLayout(new BoxLayout(totalSection, BoxLayout.Y_AXIS));
+        totalSection.setBackground(Color.WHITE);
+        totalSection.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                "AMOUNT TO PAY + CHARGES",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Arial", Font.BOLD, 14),
+                new Color(10, 45, 90)
+        ));
 
-        JTextField amountField = new JTextField();
-        amountField.setPreferredSize(new Dimension(150, 25));
-        amountPanel.add(amountField);
-        contentPanel.add(amountPanel);
+        // Calculate total with charges
+        double baseAmount = accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.PRELIM);
+        double serviceCharge = channelName.contains("Dragonpay") ? 25.00 : 0.00;
+        double additionalFee = channelName.contains("Dragonpay") ? 133.16 : 0.00; // Example additional fee
+        double totalAmount = baseAmount + serviceCharge + additionalFee;
+
+        JLabel totalAmountLabel = new JLabel(String.format("P %,.2f", totalAmount));
+        totalAmountLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        totalAmountLabel.setForeground(new Color(144, 24, 24));
+        totalAmountLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        totalSection.add(totalAmountLabel);
+
+        contentPanel.add(totalSection);
         contentPanel.add(Box.createVerticalStrut(20));
 
         // Buttons panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
 
-        JButton submitButton = new JButton("Submit Payment");
-        submitButton.setBackground(new Color(0, 150, 0));
-        submitButton.setForeground(Color.WHITE);
-        submitButton.setFont(new Font("Arial", Font.BOLD, 12));
-        submitButton.setPreferredSize(new Dimension(120, 35));
-        submitButton.addActionListener(e -> {
-            if (processPayment(cardNumberField.getText(), cvvField.getText(),
-                    expDateField.getText(), nameField.getText(),
-                    amountField.getText(), channelName)) {
-                paymentDialog.dispose();
+        JButton proceedButton = new JButton("Proceed");
+        proceedButton.setBackground(new Color(0, 150, 0));
+        proceedButton.setForeground(Color.WHITE);
+        proceedButton.setFont(new Font("Arial", Font.BOLD, 12));
+        proceedButton.setPreferredSize(new Dimension(120, 35));
+        proceedButton.addActionListener(e -> {
+            try {
+                double paymentAmount = Double.parseDouble(amountField.getText());
+                String reference = "REF" + System.currentTimeMillis();
+                
+                // Process payment through AccountStatementManager
+                AccountStatement.PaymentResult result = AccountStatementManager.processPayment(
+                    studentID, paymentAmount, channelName, reference);
+                
+                if (result.success) {
+                    JOptionPane.showMessageDialog(this, result.message, "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
+                    paymentDialog.dispose();
+                    // Refresh the statement display
+                    refreshStatementDisplay();
+                } else {
+                    JOptionPane.showMessageDialog(this, result.message, "Payment Failed", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -4634,12 +4597,111 @@ public class ISLUStudentPortal extends JFrame {
         cancelButton.setPreferredSize(new Dimension(80, 35));
         cancelButton.addActionListener(e -> paymentDialog.dispose());
 
-        buttonPanel.add(submitButton);
+        buttonPanel.add(proceedButton);
         buttonPanel.add(cancelButton);
         contentPanel.add(buttonPanel);
 
         paymentDialog.add(contentPanel, BorderLayout.CENTER);
         paymentDialog.setVisible(true);
+    }
+
+    /**
+     * Refreshes the statement display after payment processing
+     */
+    private void refreshStatementDisplay() {
+        // Update account statement
+        accountStatement = AccountStatementManager.getStatement(studentID);
+        
+        // Update amount due display
+        if (amountDueValueLabel != null) {
+            amountDueValueLabel.setText("P " + String.format("%,.2f", accountStatement.getExamPeriodDue(AccountStatement.ExamPeriod.PRELIM)));
+        }
+        
+        // Update prelim status
+        if (prelimStatusLabel != null) {
+            String prelimStatusText;
+            Color prelimStatusColor;
+            
+            if (accountStatement.isPrelimPaid()) {
+                prelimStatusText = "PRELIM STATUS: PAID. Permitted to take the exams.";
+                prelimStatusColor = new Color(0, 150, 0); // Green
+            } else {
+                prelimStatusText = "PRELIM STATUS: NOT PAID. Please pay before prelim exams. Ignore If you're SLU Dependent or Full TOF Scholar. For verification on unposted payments after \"as of\" date, please email sass@slu.edu.ph";
+                prelimStatusColor = new Color(200, 0, 0); // Red
+            }
+            
+            prelimStatusLabel.setText(prelimStatusText);
+            prelimStatusLabel.setForeground(prelimStatusColor);
+        }
+        
+        // Update fee breakdown table
+        if (feeBreakdownTableModel != null) {
+            updateFeeBreakdownTable();
+        }
+        
+        // Update payment history table
+        if (paymentTableModel != null) {
+            updatePaymentHistoryTable();
+        }
+    }
+
+    /**
+     * Updates the fee breakdown table with current data
+     */
+    private void updateFeeBreakdownTable() {
+        // Get fee breakdowns and payment history from account statement
+        List<FeeBreakdown> fees = accountStatement.getFeeBreakdowns();
+        List<PaymentTransaction> payments = accountStatement.getPaymentHistory();
+        
+        // Calculate total rows: beginning balance + fees + payments
+        Object[][] data = new Object[1 + fees.size() + payments.size()][3];
+
+        // Add beginning balance row
+        data[0] = new Object[]{"", "BEGINNING BALANCE", "0.00"};
+
+        // Add fee items (matching HTML structure)
+        int row = 1;
+        for (FeeBreakdown fee : fees) {
+            String feeDateStr = fee.getDatePosted() != null ? 
+                fee.getDatePosted().format(java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "";
+            String amountStr = String.format("%,.2f", fee.getAmount());
+            data[row] = new Object[]{feeDateStr, fee.getDescription(), amountStr};
+            row++;
+        }
+
+        // Add payment entries (negative amounts in parentheses like HTML)
+        for (PaymentTransaction payment : payments) {
+            String paymentDateStr = payment.getDate();
+            String description = "PAYMENT RECEIVED (" + payment.getReference() + ")";
+            String amountStr = "(" + String.format("%,.2f", Math.abs(Double.parseDouble(payment.getAmount().replace("P ", "").replace(",", "")))) + ")";
+            data[row] = new Object[]{paymentDateStr, description, amountStr};
+            row++;
+        }
+        
+        // Update table model
+        feeBreakdownTableModel.setDataVector(data, new String[]{"Date", "Description", "Amount"});
+    }
+
+    /**
+     * Updates the payment history table with current data
+     */
+    private void updatePaymentHistoryTable() {
+        // Update payment statuses
+        accountStatement.updatePaymentStatuses();
+
+        // Table with status
+        String[] columnNames = {"Date", "Channel", "Reference", "Amount", "Status"};
+
+        // Get payment history from account statement
+        List<PaymentTransaction> payments = accountStatement.getPaymentHistory();
+        Object[][] data = new Object[payments.size()][5];
+
+        for (int i = 0; i < payments.size(); i++) {
+            data[i] = payments.get(i).toTableRow();
+        }
+        
+        // Update table model
+        paymentTableModel.setDataVector(data, columnNames);
     }
 
     /**
@@ -4891,50 +4953,6 @@ public class ISLUStudentPortal extends JFrame {
         }
     }
 
-    /**
-     * Updates the fee breakdown table with current data
-     */
-    private void updateFeeBreakdownTable() {
-        // Clear existing rows
-        while (feeBreakdownTableModel.getRowCount() > 0) {
-            feeBreakdownTableModel.removeRow(0);
-        }
-
-        // Add header row
-        feeBreakdownTableModel.addRow(new Object[]{"", "ASSESSMENT DETAILS", ""});
-
-        // Add fee items
-        for (FeeBreakdown fee : accountStatement.getFeeBreakdowns()) {
-            feeBreakdownTableModel.addRow(fee.toTableRow());
-        }
-
-        // Add total row
-        feeBreakdownTableModel.addRow(new Object[]{
-                "", "TOTAL ASSESSMENT",
-                String.format("P %,.2f", accountStatement.getTotalAmount())
-        });
-
-        // Add balance row
-        feeBreakdownTableModel.addRow(new Object[]{
-                "", "CURRENT BALANCE",
-                String.format("P %,.2f", accountStatement.getBalance())
-        });
-    }
-
-    /**
-     * Updates the payment history table with current data
-     */
-    private void updatePaymentHistoryTable() {
-        // Clear existing rows
-        while (paymentTableModel.getRowCount() > 0) {
-            paymentTableModel.removeRow(0);
-        }
-
-        // Add payment history
-        for (PaymentTransaction payment : accountStatement.getPaymentHistory()) {
-            paymentTableModel.addRow(payment.toTableRow());
-        }
-    }
 
     // Custom Document classes for input formatting
     private static class CardNumberDocument extends javax.swing.text.PlainDocument {
