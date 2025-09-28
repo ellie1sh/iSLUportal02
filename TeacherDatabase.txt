@@ -1,0 +1,10 @@
+T001001,Dr. Doris Bullong,College of Information Technology,Assistant Professor,7024,NSTP-CWTS 1,BSIT 2A,BSIT 2B
+T001002,Dr. DJ Angelica Batton,College of Information Technology,Associate Professor,9454,GSTS,BSIT 2A,BSIT 2B
+T001003,Dr. Dianne Rose Abalos,College of Information Technology,Professor,9455,GENVI,BSIT 2A,BSIT 2B
+T001004,Dr. Jhoven Taguitag,College of Information Technology,Assistant Professor,9456,CFE 103,BSIT 2A,BSIT 2B
+T001005,Dr. Lambert Famorca,College of Information Technology,Associate Professor,9457,IT 211,BSIT 2A,BSIT 2B
+T001006,Dr. Romulos Amistad,College of Information Technology,Assistant Professor,9458A,IT 212,BSIT 2A,BSIT 2B
+T001007,Dr. Romulos Amistad,College of Information Technology,Professor,9458B,IT 212L,BSIT 2A,BSIT 2B
+T001008,Dr. Gerry Paul Genove,College of Information Technology,Assistant Professor,9459A,IT 213,BSIT 2A,BSIT 2B
+T001009,Dr. Gerry Paul Genove,College of Information Technology,Associate Professor,9459B,IT 213L,BSIT 2A,BSIT 2B
+T001010,Dr. Marcelino Lagyuo,College of Information Technology,Assistant Professor,9547,FIT OA,BSIT 2A,BSIT 2B

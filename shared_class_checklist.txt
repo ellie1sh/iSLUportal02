@@ -1,0 +1,10 @@
+2251234|IT111|Project 1|Completed|Excellent work
+2251235|IT111|Project 1|Completed|Good work
+2251236|IT111|Project 1|Pending|Not submitted
+2251234|IT111|Midterm Exam|Completed|Passed
+2251235|IT111|Midterm Exam|Completed|Passed
+2252432|7024|Midterm Exam|Complete|
+2252432|7024|Project 1|Complete|
+2252432|7024|Project 2|Pending|
+2252432|7024|Final Exam|Complete|
+2252432|7024|Participation|Complete|
