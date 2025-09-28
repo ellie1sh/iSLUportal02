@@ -28,7 +28,7 @@ public class AccountStatementManager {
     }
 
     /**
-     * Creates a new account statement with default fees
+     * Creates a new account statement with database fees
      */
     private static AccountStatement createNewStatement(String studentID) {
         AccountStatement statement = new AccountStatement(
@@ -37,8 +37,8 @@ public class AccountStatementManager {
                 "2025-2026"
         );
 
-        // Add default fees for the semester
-        addDefaultFees(statement);
+        // Add fees from database
+        addDatabaseFees(statement, studentID);
 
         statements.put(studentID, statement);
         saveStatements();
@@ -47,59 +47,15 @@ public class AccountStatementManager {
     }
 
     /**
-     * Adds default fees to a new statement
+     * Adds fees from database to a new statement
      */
-    private static void addDefaultFees(AccountStatement statement) {
-        LocalDate now = LocalDate.now();
-
-        // Base tuition and fees for IT students
-        statement.addFee(new FeeBreakdown("TF001", "Tuition Fee (21 units @ P1,500/unit)",
-                31500.00, FeeBreakdown.FeeType.TUITION, now));
-
-        statement.addFee(new FeeBreakdown("LF001", "Computer Laboratory Fee",
-                3500.00, FeeBreakdown.FeeType.LABORATORY, now));
-
-        statement.addFee(new FeeBreakdown("MF001", "Miscellaneous Fee",
-                2800.00, FeeBreakdown.FeeType.MISCELLANEOUS, now));
-
-        statement.addFee(new FeeBreakdown("RF001", "Registration Fee",
-                500.00, FeeBreakdown.FeeType.REGISTRATION, now));
-
-        statement.addFee(new FeeBreakdown("LB001", "Library Fee",
-                800.00, FeeBreakdown.FeeType.LIBRARY, now));
-
-        statement.addFee(new FeeBreakdown("AT001", "Athletic Fee",
-                500.00, FeeBreakdown.FeeType.ATHLETIC, now));
-
-        statement.addFee(new FeeBreakdown("MD001", "Medical/Dental Fee",
-                400.00, FeeBreakdown.FeeType.MEDICAL, now));
-
-        statement.addFee(new FeeBreakdown("GD001", "Guidance Fee",
-                300.00, FeeBreakdown.FeeType.GUIDANCE, now));
-
-        statement.addFee(new FeeBreakdown("PB001", "Student Publication Fee",
-                250.00, FeeBreakdown.FeeType.PUBLICATION, now));
-
-        statement.addFee(new FeeBreakdown("IN001", "Internet and Technology Fee",
-                1500.00, FeeBreakdown.FeeType.INTERNET, now));
-
-        statement.addFee(new FeeBreakdown("EN001", "Energy Fee",
-                1200.00, FeeBreakdown.FeeType.ENERGY, now));
-
-        statement.addFee(new FeeBreakdown("IS001", "Student Insurance",
-                350.00, FeeBreakdown.FeeType.INSURANCE, now));
-
-        statement.addFee(new FeeBreakdown("DV001", "Development Fund",
-                1000.00, FeeBreakdown.FeeType.DEVELOPMENT, now));
-
-        statement.addFee(new FeeBreakdown("CL001", "Cultural Activities Fee",
-                300.00, FeeBreakdown.FeeType.CULTURAL, now));
-
-        // Apply early enrollment discount if applicable
-        LocalDate enrollmentDeadline = LocalDate.of(2025, 7, 15);
-        if (LocalDate.now().isBefore(enrollmentDeadline)) {
-            statement.addFee(new FeeBreakdown("DISC01", "Early Enrollment Discount (5%)",
-                    -2225.00, FeeBreakdown.FeeType.DISCOUNT, now, "5% discount on total fees"));
+    private static void addDatabaseFees(AccountStatement statement, String studentID) {
+        // Get all fees for this student from database
+        List<FeeBreakdown> fees = FeeDatabase.getAllFeesForStudent(studentID);
+        
+        // Add each fee to the statement
+        for (FeeBreakdown fee : fees) {
+            statement.addFee(fee);
         }
     }
 
@@ -307,6 +263,35 @@ public class AccountStatementManager {
         }
     }
 
+    /**
+     * Refreshes fees for a specific student from database
+     */
+    public static void refreshFeesFromDatabase(String studentID) {
+        AccountStatement statement = statements.get(studentID);
+        if (statement != null) {
+            // Clear existing fees
+            statement.getFeeBreakdowns().clear();
+            
+            // Add updated fees from database
+            addDatabaseFees(statement, studentID);
+            
+            // Recalculate totals
+            statement.recalculateTotals();
+            
+            // Save updated statement
+            saveStatements();
+        }
+    }
+    
+    /**
+     * Refreshes fees for all students from database
+     */
+    public static void refreshAllFeesFromDatabase() {
+        for (String studentID : statements.keySet()) {
+            refreshFeesFromDatabase(studentID);
+        }
+    }
+    
     /**
      * Clears all cached statements (for testing)
      */

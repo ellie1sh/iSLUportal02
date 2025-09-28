@@ -13,7 +13,7 @@ import java.util.List;
  * Implements the visual design from the HTML template with Java Swing
  * Matches the layout and functionality shown in the provided images
  */
-public class StatementOfAccountsPanel extends JPanel {
+public class StatementOfAccountsPanel extends JPanel implements FeeDatabase.FeeUpdateListener {
     
     // Color scheme matching the HTML design
     private static final Color HEADER_BLUE = new Color(14, 40, 79); // #0e284f
@@ -40,6 +40,9 @@ public class StatementOfAccountsPanel extends JPanel {
     public StatementOfAccountsPanel(String studentID) {
         this.studentID = studentID;
         this.accountStatement = AccountStatementManager.getStatement(studentID);
+        
+        // Register as fee update listener
+        FeeDatabase.addFeeUpdateListener(this);
         
         initializeComponents();
         setupLayout();
@@ -591,5 +594,25 @@ public class StatementOfAccountsPanel extends JPanel {
         } else {
             JOptionPane.showMessageDialog(this, result.message, "Payment Failed", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    // Fee update listener implementation
+    @Override
+    public void onFeesUpdated(String updatedStudentID) {
+        // Update if this is for our student or for all students
+        if (updatedStudentID.equals(studentID) || updatedStudentID.equals("ALL")) {
+            // Refresh fees from database
+            AccountStatementManager.refreshFeesFromDatabase(studentID);
+            
+            // Update the display on the EDT (Event Dispatch Thread)
+            SwingUtilities.invokeLater(() -> {
+                updateDisplay();
+            });
+        }
+    }
+    
+    // Cleanup method to remove listener when panel is destroyed
+    public void cleanup() {
+        FeeDatabase.removeFeeUpdateListener(this);
     }
 }
