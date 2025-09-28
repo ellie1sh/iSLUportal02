@@ -686,7 +686,7 @@ public class ISLUStudentPortal extends JFrame {
                 showPersonalDetailsContent(convertSubMenuItemsToStrings(item.getSubItems()));
                 break;
             case "🧮 Statement of Accounts":
-                contentPanel.add(createStatementOfAccountsPanel(convertSubMenuItemsToStrings(item.getSubItems())));
+                contentPanel.add(new StatementOfAccountsPanel(studentID));
                 break;
             case "📋 Transcript of Records":
                 contentPanel.add(createTranscriptOfRecordsPanel(convertSubMenuItemsToStrings(item.getSubItems())));
