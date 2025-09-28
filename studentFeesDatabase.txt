@@ -1,0 +1,4 @@
+# Student-Specific Fees Database
+# Format: STUDENT:ID followed by FEE:CODE,DESCRIPTION,AMOUNT,TYPE,DATE_POSTED,REMARKS
+# Last Updated: 2025-09-28
+

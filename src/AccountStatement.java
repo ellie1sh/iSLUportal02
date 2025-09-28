@@ -214,7 +214,7 @@ public class AccountStatement {
     /**
      * Recalculates all totals based on current fees
      */
-    private void recalculateTotals() {
+    public void recalculateTotals() {
         totalTuition = 0;
         totalFees = 0;
 
